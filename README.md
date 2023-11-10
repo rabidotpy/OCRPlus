@@ -12,27 +12,22 @@ Welcome to the GPT-4 Vision Capture Extension – your smart companion for insta
 
 ## How to use it:
 
-- Video Guide
-https://github.com/rabidotpy/OCRPlus/blob/main/extentionImageAndVids/vidGuide.mp4
+- Video Guide https://github.com/rabidotpy/OCRPlus/blob/main/extentionImageAndVids/vidGuide.mp4
 
 - Download the source code from this repo or clone the repo.
 - Head to chrome://extensions and turn on the developer mode
-<br>
   ![Pasted image](./extentionImageAndVids/Pastedimage%2020231110194226.png)
 - The click on **Load unpacked** and select the folder of this extension that you **cloned/downloaded** 
-- After that you will see extension here <br> ![Pasted image](./extentionImageAndVids/Pastedimage%2020231110195610.png)
+- After that you will see extension here ![Pasted image](./extentionImageAndVids/Pastedimage%2020231110195610.png)
 
-- After that Pin your extension in chrome <br>
+- After that Pin your extension in chrome
 ![](extentionImageAndVids/Pastedimage%2020231110195726.png)
 - Click on the extension and Add your GPT4 API key in this box and click on **Next**
-<br>
 ![](./extentionImageAndVids/Pastedimage%2020231110201034.png)
 - Click on add and you are good to go.
 - Now click on Select area on the screen
-<br>
 ![](./extentionImageAndVids/Pastedimage%2020231110201440.png)
 - Select the area and click on capture.
 - Then text box appears.
-<br>
 ![](./extentionImageAndVids/Pastedimage%2020231110201629.png)
 - Type your message and **Enter** wait for the response.
