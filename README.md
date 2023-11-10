@@ -1,4 +1,4 @@
-# GPT-4 Vision Capture Extension
+# OCR Plus (GPT-4 Vision Capture Extension)
 
 Welcome to the GPT-4 Vision Capture Extension – your smart companion for instant information retrieval from any part of your web browsing experience. Using the cutting-edge capabilities of OpenAI's GPT-4 Vision API, this extension allows you to capture a portion of your webpage, ask questions, and receive contextually relevant answers.
 
