@@ -3,7 +3,7 @@
     "message": "NEW"
   },
   "name": {
-    "message": "SuperChrome: Webpage Screenshot for Chrome™"
+    "message": "OCRPLUS"
   },
   "dir": {
     "message": "ltr"
@@ -12,7 +12,7 @@
     "message": "settings"
   },
   "description": {
-    "message": "The easiest, fastest and trustiest way to capture and share full pages. It's always Free, and open-source!"
+    "message": "GPT-4 Vision Capture Extension – your smart companion for instant information retrieval from any part of your web browsing experience. Using the cutting-edge capabilities of OpenAI's GPT-4 Vision API, this extension allows you to capture a portion of your webpage, ask questions, and receive contextually relevant answers."
   },
   "preview": {
     "message": "Preview:"

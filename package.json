@@ -1,21 +1,21 @@
 {
-  "name": "superchrome",
+  "name": "OCRPLUS",
   "version": "1.0.0",
-  "description": "Open Source extension far beyond typical Screenshot Capturing: Save, Edit, Annotate, Print, and Share! This is a open-source extension for taking screenshots.  This extension is able to capture 100% of both the vertical and horizontal content appearing on any webpage on the Internet.  It is very easy to save the captured file onto your computer or print it / or share it to any social network.",
+  "description": "OCRPLUS GPT-4 Vision Capture Extension – your smart companion for instant information retrieval from any part of your web browsing experience. Using the cutting-edge capabilities of OpenAI's GPT-4 Vision API, this extension allows you to capture a portion of your webpage, ask questions, and receive contextually relevant answers.",
   "main": "editor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/1click-extensions/1click-webpage-screenshot.git"
+    "url": "git+https://github.com/rabidotpy/OCRPlus.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/1click-extensions/1click-webpage-screenshot/issues"
+    "url": "https://github.com/rabidotpy/OCRPlus.git/issues"
   },
-  "homepage": "https://github.com/1click-extensions/1click-webpage-screenshot#readme",
+  "homepage": "https://github.com/rabidotpy/OCRPlus.git#readme",
   "dependencies": {
     "@types/chrome": "0.0.81",
     "openai": "^4.17.0"
