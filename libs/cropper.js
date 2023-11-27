@@ -445,148 +445,206 @@ function load_cropper_without_selection(rect) {
       downloadedImageUrl = url;
     });
 
+    // Function to dynamically adjust the height of the textarea
+    function adjustTextareaHeight(textarea) {
+      textarea.css("height", "auto");
+      var contentHeight = textarea.prop("scrollHeight");
+      textarea.css("height", contentHeight + "px");
+    }
+
     // Create a textarea element
-    var textarea = $("<textarea/>").on("keypress", function (e) {
-      // Check if a response has been received
-      if (responseReceived) {
-        // If a response has been received, don't make a request
-        return;
-      }
+    var textarea = $("<textarea/>")
+      .css({
+        position: "sticky",
+        top: "50%",
+        left: "10%",
+        background: "transparent",
+        border: "1px solid white",
+        borderRadius: "5px",
+        // textAlign: "center",
+        minHeight: "45px",
+        maxWidth: "80%",
+        width: "80%",
+        maxHeight: "60%",
 
-      // Check if the Enter key was pressed
-      if (e.which == 13) {
-        // Prevent the default action
-        e.preventDefault();
+        color: "white",
+        overflow: "auto", // Add scroll if content exceeds height
+      })
+      .on("keypress", function (e) {
+        console.log("e: ", e);
+        // After processing the key press, adjust the height of the textarea
+        adjustTextareaHeight($(this));
+        // var heightLimit = 200; /* Maximum height: 200px */
+        // textarea.oninput = function () {
+        //   textarea.style.height = ""; /* Reset the height*/
+        //   textarea.style.height =
+        //     Math.min(textarea.scrollHeight, heightLimit) + "px";
+        // }; // referance
 
-        // Log the textarea value and the image filename and url to the console, then clear the textarea
-        console.log("Text:", $(this).val());
-        console.log("Image filename:", downloadedImageFilename);
-        console.log("Image url:", downloadedImageUrl);
+        // now when user is typing increase the height of textarea
+        // textarea.css("height", "auto");
+        // textarea.css("height", textarea.prop("scrollHeight") + "px");
 
-        // getting the localStorage.setItem("savedImage", base64data); from the content script
-        var base64data = localStorage.getItem("savedImage");
+        // keypress means when a key is pressed like enter key
+        // Check if a response has been received
+        if (responseReceived) {
+          // If a response has been received, don't make a request
+          return;
+        }
 
-        // console.log("base64data: ", base64data);
-        // Send the base64 data to the background script
-        // chrome.runtime.sendMessage({ base64data: base64data });
-        // var base64data = localStorage.getItem("savedImage");
+        // Check if the Enter key was pressed
+        if (e.which == 13) {
+          // Prevent the default action
+          e.preventDefault();
 
-        // console.log("base64data: ", base64data);
+          // Log the textarea value and the image filename and url to the console, then clear the textarea
+          var realText = $(this).val();
+          console.log("Text:", $(this).val());
+          console.log("Image filename:", downloadedImageFilename);
+          console.log("Image url:", downloadedImageUrl);
 
-        // document
-        //   .getElementById("api-key")
-        //   .addEventListener("change", function () {
-        //     localStorage.setItem("API_KEY", this.value);
-        //   });
+          // getting the localStorage.setItem("savedImage", base64data); from the content script
+          var base64data = localStorage.getItem("savedImage");
 
-        // chrome.storage.sync.get(["key"], function (result) {
-        //   var apiKey = result.key;
-        //   useApiKey(apiKey);
-        // });
-        getApiKey()
-          .then((apiKey) => {
-            console.log("apiKey: ", apiKey);
-            var headers = new Headers();
-            headers.append("Content-Type", "application/json");
-            headers.append("Authorization", `Bearer ${apiKey}`);
-            // headers.append(
-            //   "Authorization",
-            //   "Bearer OPENAI_API_KEY_HERE"
-            // );
+          // console.log("base64data: ", base64data);
+          // Send the base64 data to the background script
+          // chrome.runtime.sendMessage({ base64data: base64data });
+          // var base64data = localStorage.getItem("savedImage");
 
-            var body = JSON.stringify({
-              model: "gpt-4-vision-preview",
-              messages: [
-                {
-                  role: "user",
-                  content: [
-                    { type: "text", text: `${$(this).val()}` },
-                    {
-                      type: "image_url",
-                      image_url: `${base64data}`,
-                    },
-                  ],
-                },
-              ],
-              max_tokens: 300,
-            });
+          // console.log("base64data: ", base64data);
 
-            // console.log("body: ", body);
-            let responses;
+          // document
+          //   .getElementById("api-key")
+          //   .addEventListener("change", function () {
+          //     localStorage.setItem("API_KEY", this.value);
+          //   });
 
-            fetch("https://api.openai.com/v1/chat/completions", {
-              method: "POST",
-              headers: headers,
-              body: body,
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                // changing the textarea value to responses
-                $(this).val("");
-                var content = data.choices[0].message.content;
-                textarea.val(content);
+          // chrome.storage.sync.get(["key"], function (result) {
+          //   var apiKey = result.key;
+          //   useApiKey(apiKey);
+          // });
+          getApiKey()
+            .then((apiKey) => {
+              console.log("apiKey: ", apiKey);
+              var headers = new Headers();
+              headers.append("Content-Type", "application/json");
+              headers.append("Authorization", `Bearer ${apiKey}`);
+              // headers.append(
+              //   "Authorization",
+              //   "Bearer OPENAI_API_KEY_HERE"
+              // );
 
-                // the content should be automatically copied to the clipboard
+              console.log("text:", `${realText}`);
+              var body = JSON.stringify({
+                model: "gpt-4-vision-preview",
+                messages: [
+                  {
+                    role: "user",
+                    content: [
+                      { type: "text", text: `${realText}` },
+                      {
+                        type: "image_url",
+                        image_url: `${base64data}`,
+                      },
+                    ],
+                  },
+                ],
+                max_tokens: 2000,
+              });
 
-                // adjust the size of the textarea based on the content length
-                var lines = content.split("\n").length;
-                textarea.attr("rows", lines);
+              console.log("realText: ", realText);
 
-                // apply dark mode style
-                textarea.css({
-                  backgroundColor: "#333", // dark gray background
-                  color: "#fff", // white text
-                  padding: "10% 10%", // top/bottom padding 10%, left/right padding 10%
-                  border: "1px solid black",
-                  zIndex: 9999,
-                  width: "500px",
-                  height: "250px",
-                });
+              // console.log("body: ", body);
+              let responses;
 
-                // make the textarea read-only
-                textarea.prop("readonly", true);
-                // Show the close button
-                closeButton.css("display", "block");
-
-                // Set the flag to true
-                responseReceived = true;
-
-                // copy content to clipboard after 4 seconds
-                setTimeout(function () {
-                  navigator.clipboard.writeText(content).then(
-                    function () {
-                      console.log("Copying to clipboard was successful!");
-                    },
-                    function (err) {
-                      console.error("Could not copy text: ", err);
-                    }
-                  );
-                }, 4000); // 4000 milliseconds = 4 seconds
+              fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: headers,
+                body: body,
               })
-              .catch((error) => console.error("Error:", error));
-          })
-          .catch((error) => console.error("Error:", error));
+                .then((response) => response.json())
+                .then((data) => {
+                  // changing the textarea value to responses
+                  $(this).val("");
+                  var content = data.choices[0].message.content;
+                  textarea.val(content);
 
-        // console.log("responses: ", responses);
+                  // the content should be automatically copied to the clipboard
 
-        $(this).val("wait for it...");
-      }
-    });
+                  // adjust the size of the textarea based on the content length
+                  var lines = content.split("\n").length;
+                  textarea.attr("rows", lines);
 
+                  // apply dark mode style
+                  textarea.css({
+                    position: "sticky",
+                    top: "50%",
+                    left: "10%",
+                    background: "transparent",
+                    border: "1px solid white",
+                    borderRadius: "5px",
+                    // textAlign: "center",
+                    maxWidth: "80%",
+                    maxHeight: "80%",
+
+                    color: "white",
+                    overflow: "auto", // Add scroll if content exceeds height
+                  });
+
+                  // Call the function to adjust the popup size
+                  adjustPopupSize(textarea, popup);
+                  // make the textarea read-only
+                  textarea.prop("readonly", true);
+                  // Show the close button
+                  closeButton.css("display", "block");
+
+                  // Set the flag to true
+                  responseReceived = true;
+
+                  // copy content to clipboard after 4 seconds
+                  setTimeout(function () {
+                    navigator.clipboard.writeText(content).then(
+                      function () {
+                        console.log("Copying to clipboard was successful!");
+                      },
+                      function (err) {
+                        console.error("Could not copy text: ", err);
+                      }
+                    );
+                  }, 4000); // 4000 milliseconds = 4 seconds
+                })
+                .catch((error) => console.error("Error:", error));
+            })
+            .catch((error) => console.error("Error:", error));
+
+          // console.log("responses: ", responses);
+
+          $(this).val("wait for it...");
+        }
+      });
+
+    // Create a popup with the textarea
     // Create a popup with the textarea
     var popup = $("<div/>")
       .css({
+        width: "25%", // full width of the popup
         position: "fixed",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        backgroundColor: "#f9f9f9", // light gray background
-        border: "1px solid #ccc", // light gray border
-        borderRadius: "10px", // rounded corners
-        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", // shadow effect
-        padding: "20px", // space around the content
+        // backgroundColor: "#333", // dark background
+        background: "#00000069",
+        "margin-bottom": "5px",
+        // color: "#fff", // white text color
+        border: "1px solid #555", // subtle border
+        borderRadius: "8px", // rounded corners
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)", // stronger shadow
+        padding: "10px",
         zIndex: 9999,
-        transition: "all 0.3s ease", // transition effect
+        transition: "all 0.3s ease",
+        maxWidth: "90%", // ensure responsiveness
+        maxHeight: "90%",
+        overflow: "auto", // add scroll for smaller screens
       })
       .append(textarea);
 
@@ -595,19 +653,27 @@ function load_cropper_without_selection(rect) {
       .text("X")
       .css({
         position: "absolute",
-        top: "0",
-        right: "0",
-        borderRadius: "10%",
-        backgroundColor: "rgba(255, 0, 0, 0.5)",
-        display: "none", // initially hide the butto
+        top: "10px",
+        right: "10px",
+        borderRadius: "10%", // circular button
+        backgroundColor: "#ff5555", // red color for contrast
+        color: "#fff", // white text
+        border: "none",
+        cursor: "pointer", // cursor indication for clickable
+        padding: "5px 10px",
+        fontSize: "16px",
       })
       .on("click", function () {
         popup.remove();
       })
       .appendTo(popup);
 
-    // Append the popup to the body
-    $("body").append(popup);
+    // Show the popup after 2 seconds
+    setTimeout(function () {
+      // Append the popup to the body
+      $("body").append(popup);
+      popup.css("display", "block");
+    }, 2000);
 
     // Prevent the default action
     return false;
@@ -624,6 +690,22 @@ function load_cropper_without_selection(rect) {
   //     })
   //   );
   // });
+  function adjustPopupSize(textarea, popup) {
+    // Set a base height
+    textarea.css("height", "auto");
+
+    // Adjust the height to fit the content
+    var newHeight = textarea.prop("scrollHeight");
+    textarea.css("height", newHeight + "px");
+
+    // Adjust the popup size based on the textarea's new height
+    // Set max height and width to ensure it doesn't grow too large
+    popup.css({
+      maxHeight: "90%",
+      maxWidth: "90%",
+      overflow: "auto",
+    });
+  }
 
   var staticPlugin = new Toolbar({
     plugins: plugins_to_show,
